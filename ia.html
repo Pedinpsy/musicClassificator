@@ -1,0 +1,42 @@
+
+	<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		function asd(){
+			var artist = "mc-g15";
+	var song   = "One";
+	jQuery.getJSON(
+	    "https://www.vagalume.com.br/"+artist+"/discografia/index.js",        
+	    function (data) {
+	        // Letra da música
+	        for(item in data.discography.item){
+	        	//console.log(data.discography.item[item])
+	        		for(disc in data.discography.item[item].discs){
+	        			//console.log(data.discography.item[item].discs[disc])
+	        			for(musc in data.discography.item[item].discs[disc]){
+	        				console.log(data.discography.item[item].discs[disc][musc].desc)
+	        				jQuery.getJSON(
+			"https://api.vagalume.com.br/search.php"
+				+ "?apikey=fe1c6a2f5ac7edd3a8a6a289c294928d"
+				+ "&art=" + artist
+				+ "&mus=" + data.discography.item[item].discs[disc][musc].desc,
+	    function (data) {
+	        // Letra da música
+	        alert(data.mus[0].text);
+	    }
+	);
+	        			}
+	        		}
+
+	        }
+	        //console.log(data.discography.item);
+	    }
+	);
+		}
+
+
+	</script>
+	</head>
+
+
+	<input onclick = "asd()" value="asdasd" type="button" name="asd"></input>
