@@ -66,7 +66,7 @@ def ToBinarie(dire,dic):
 	dicionarioFile = open(dic,"r")
 	dicionario = dicionarioFile.read()
 	dicionarioFile.close
-	for file in diretorios:
+	for file in dire:
 		binarie = []
 		diretoriosFile = open(file,"r")
 		musica = diretoriosFile.read()
@@ -76,24 +76,59 @@ def ToBinarie(dire,dic):
 			else:
 				binarie.append(1)
 		diretoriosFile.close()
-		saveBin = open("C:/Users/Vittor/Documents/pedro/IA/BaseBinaria/"+file.replace("C:/Users/Vittor/Documents/pedro/IA/BaseMisturada",""),"w")
-		binarie.append(musica.split(" ")[len(musica.split(" "))-1])
-		saveBin.write("".join(str(e)+" " for e in binarie))
-		print(musica.split(" ")[len(musica.split(" "))-1])
+		
+		binarie.append(musica.split(" ")[len(musica.split(" "))-1].replace(" ",""))
+		if binarie[len(binarie)-1] != "SERTANEJO" and binarie[len(binarie)-1] != 'ROCK' and binarie[len(binarie)-1] != 'FUNK':
+			continue
+		else:
+			saveBin = open("D:/Usuario/Documents/musicClassificator/BaseBinaria/"+file.replace("D:/Usuario/Documents/musicClassificator/BaseMisturada",""),"w")
+			saveBin.write("".join(str(e)+" " for e in binarie).replace(binarie[len(binarie)-1]+" ",binarie[len(binarie)-1]))
+
 		saveBin.close()
 
 
 
 
-	for item in diretorios:
+	for item in dire:
 		arq = open(item,"r")
 		musica = arq.read()
 
 
+def toCsv(dire):
+	arq = open('D:/Usuario/Documents/musicClassificator/Dicionario.txt',"r")
+	head = arq.read()
+	head = head.replace(" ", ",")
+	vec = head.split(",")
+	arq.close()
+	arq = open('D:/Usuario/Documents/musicClassificator/BaseBinaria/allFile.csv',"a")
+	print(len((head+",Class").replace(",\n","\n").split(",")))
+	input()
+	arq.write((head+",Class"+'\n').replace(",\n","\n"))
+	arq.close()
+	for item in dire:
+		arq = open(item,"r")
+		musc = arq.read()
+		musc = musc.replace(" ", ",")
+		vec = musc.split(",")
+		print(len(vec))
+		print(item)
+		input()
+		#print(musc)
+		arq.close()
+		arq = open('D:/Usuario/Documents/musicClassificator/BaseBinaria/allFile.csv',"a")
+		arq.write((musc+'\n').replace(",\n","\n"))
+		arq.close()
 
 
-diretorios = lerPasta("C:/Users/Vittor/Documents/pedro/IA/BaseMisturada")
-ToBinarie(diretorios,"C:/Users/Vittor/Documents/pedro/IA/Dicionario.txt")
+
+
+direMist = lerPasta("D:/Usuario/Documents/musicClassificator/BaseMisturada")
+
+#print(diretorios)
+ToBinarie(direMist,"D:/Usuario/Documents/musicClassificator/Dicionario.txt")
+diretorios = lerPasta("D:/Usuario/Documents/musicClassificator/BaseBinaria")
+toCsv(diretorios)
+
 
 
 
