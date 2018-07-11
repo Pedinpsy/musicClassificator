@@ -31,7 +31,12 @@ def removeDuplicate(s,dic):
 	return ''.join(result) 
 
 def removeArtigos(palavras):
-	return palavras.replace(" A "," ").replace(" O "," ").replace(" UMA "," ").replace(" UM "," ").replace(" UMAS "," ").replace(" UNS "," ")
+	return palavras.replace(" A "," ").replace(" O "," ").replace(" UMA "," ").replace(" UM "," ").replace(" UMAS "," ").replace(" UNS "," ").replace(" AS "," ").replace(" OS "," ")
+
+def removePreposicoes(palavras):
+	return palavras.replace(" DE "," ").replace(" PARA "," ").replace(" PRA "," ").replace(" PRO "," ").replace(" DA "," ").replace(" DO "," ").replace(" DAS "," ").replace(" DOS "," ").replace(" QUE "," ").replace(" QUAL "," ").replace(" QUANDO "," ")
+
+
 
 
 def lerPasta(pasta):
@@ -44,7 +49,7 @@ def geraBase(diretorios):
 		arq = open(item,'r')
 		musica = removeDuplicate(removeArtigos(removerAcentosECaracteresEspeciais(arq.read())))
 		arq.close()
-		arq = open("C:/Users/Vittor/Documents/pedro/IA/raimundosBase"+item.replace('C:/Users/Vittor/Documents/pedro/IA/raimundos',''),'w')
+		arq = open("raimundosBase"+item.replace('raimundos',''),'w')
 		arq.write(musica.strip(" "))
 		arq.close()
 
@@ -57,8 +62,9 @@ def gerarDicionario(diretorios):
 		arq.close()
 	result = result.replace(" Sertanejo ".upper()," ").replace(" Rock ".upper()," ").replace(" Funk ".upper(), " ")
 	result = result.replace(" FUNK "," ")
-	arq = open("C:/Users/Vittor/Documents/pedro/IA/Dicionario.txt","w")
-	arq.write("".join(result))
+	result = result[0:len(result)-1]
+	arq = open("Dicionario.txt","w")
+	arq.write("".join(result).replace(" \0","\0"))
 	arq.close()
 
 def ToBinarie(dire,dic):
@@ -81,7 +87,7 @@ def ToBinarie(dire,dic):
 		if binarie[len(binarie)-1] != "SERTANEJO" and binarie[len(binarie)-1] != 'ROCK' and binarie[len(binarie)-1] != 'FUNK':
 			continue
 		else:
-			saveBin = open("D:/Usuario/Documents/musicClassificator/BaseBinaria/"+file.replace("D:/Usuario/Documents/musicClassificator/BaseMisturada",""),"w")
+			saveBin = open("BaseBinaria/"+file.replace("base2",""),"w")
 			saveBin.write("".join(str(e)+" " for e in binarie).replace(binarie[len(binarie)-1]+" ",binarie[len(binarie)-1]))
 
 		saveBin.close()
@@ -95,12 +101,12 @@ def ToBinarie(dire,dic):
 
 
 def toCsv(dire):
-	arq = open('D:/Usuario/Documents/musicClassificator/Dicionario.txt',"r")
+	arq = open('Dicionario.txt',"r")
 	head = arq.read()
 	head = head.replace(" ", ",")
 	vec = head.split(",")
 	arq.close()
-	arq = open('D:/Usuario/Documents/musicClassificator/BaseBinaria/allFile.csv',"a")
+	arq = open('BaseBinaria/allFile.csv',"a")
 	print(len((head+",Class").replace(",\n","\n").split(",")))
 	input()
 	arq.write((head+",Class"+'\n').replace(",\n","\n"))
@@ -112,21 +118,25 @@ def toCsv(dire):
 		vec = musc.split(",")
 		print(len(vec))
 		print(item)
+		if len((head+",Class").replace(",\n","\n").split(",")) != len(vec):
+			arq.close()
+			continue
 		input()
 		#print(musc)
 		arq.close()
-		arq = open('D:/Usuario/Documents/musicClassificator/BaseBinaria/allFile.csv',"a")
+		arq = open('BaseBinaria/allFile.csv',"a")
 		arq.write((musc+'\n').replace(",\n","\n"))
 		arq.close()
 
 
 
 
-direMist = lerPasta("D:/Usuario/Documents/musicClassificator/BaseMisturada")
+direMist = lerPasta("base2")
+gerarDicionario(direMist)
+print(direMist)
 
-#print(diretorios)
-ToBinarie(direMist,"D:/Usuario/Documents/musicClassificator/Dicionario.txt")
-diretorios = lerPasta("D:/Usuario/Documents/musicClassificator/BaseBinaria")
+ToBinarie(direMist,"Dicionario.txt")
+diretorios = lerPasta("BaseBinaria")
 toCsv(diretorios)
 
 
